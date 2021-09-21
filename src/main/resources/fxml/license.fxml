@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="767.0" prefWidth="921.0" style="-fx-background-color: #ECF0F1;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codetreatise.controller.LicenseController">
+   <children>
+      <AnchorPane layoutX="15.0" layoutY="-22.0" prefHeight="410.0" prefWidth="894.0" style="-fx-background-color: #FFFFFF; -fx-border-radius: 30; -fx-background-radius: 30">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <children>
+            <AnchorPane layoutX="67.0" layoutY="213.0" prefHeight="138.0" prefWidth="206.0" style="-fx-background-color: #DCECF7; -fx-border-radius: 30; -fx-background-radius: 30;">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <children>
+                  <Text fill="#636363" layoutX="20.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Datasources">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="datacount" fill="#370384" layoutX="80.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="20">
+                     <font>
+                        <Font name="System Bold" size="40.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="292.0" layoutY="213.0" prefHeight="138.0" prefWidth="206.0" style="-fx-background-color: #F7ECDD; -fx-border-radius: 30; -fx-background-radius: 30;">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <children>
+                  <Text fill="#636363" layoutX="22.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Licenses">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="licensecount" fill="#370384" layoutX="81.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="25">
+                     <font>
+                        <Font name="System Bold" size="40.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <Line endX="50.0" layoutX="556.0" layoutY="284.0" opacity="0.26" rotate="90.0" startX="-100.0" stroke="#00000045" strokeWidth="2.0" />
+            <Line endX="1.0" layoutX="734.0" layoutY="50.0" opacity="0.26" rotate="90.0" startX="30.0" stroke="#00000045" strokeWidth="2.0" />
+            <Text fill="MIDNIGHTBLUE" layoutX="14.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="License Dashboard">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Text>
+            <Text fill="#5da1f4" layoutX="676.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <Text fill="#5da1f4" layoutX="760.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Genesis">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <AnchorPane layoutX="23.0" layoutY="182.0" onMouseClicked="#buttonHandlerFormlogin" prefHeight="200.0" prefWidth="22.0" style="-fx-background-color: #DCECF7; -fx-border-radius: 30; -fx-background-radius: 30; -fx-border-color: #B16F09;">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </AnchorPane>
+            <Line endX="120.0" layoutX="650.0" layoutY="287.0" opacity="0.16" startX="-100.0" stroke="#00000045" strokeWidth="2.0" />
+            <Text fill="#636363" layoutX="553.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Status">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Text>
+            <Text fill="#636363" layoutX="733.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Text>
+            <Text fill="#063a7a" layoutX="554.0" layoutY="256.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Running">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text fill="#063a7a" layoutX="698.0" layoutY="255.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2021-02-05">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text fill="#063a7a" layoutX="554.0" layoutY="322.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expired">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text fill="#063a7a" layoutX="698.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2021-02-28">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <AnchorPane layoutY="81.0" opacity="0.39" prefHeight="88.0" prefWidth="878.0" style="-fx-background-color: #DFDDDA;">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#000abf" height="88.0" layoutX="207.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="424.0" />
+                  <Line endX="50.0" layoutX="404.0" layoutY="42.0" opacity="0.26" rotate="90.0" startX="-20.0" stroke="WHITE" strokeWidth="2.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="88.0" layoutX="206.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="14.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="88.0" layoutX="618.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="14.0" />
+                  <ComboBox fx:id="cbRole" layoutX="23.0" layoutY="24.0" prefWidth="150.0" />
+                  <Group layoutX="430.0" layoutY="4.0" onMouseClicked="#buttonHandlerFormtwo">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#000abf" height="78.0" layoutX="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="176.0" />
+                        <Text fill="WHITE" layoutX="54.0" layoutY="42.0" onMouseClicked="#buttonHandlerFormtwo" strokeType="OUTSIDE" strokeWidth="0.0" text="Generate">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </Group>
+                  <Group layoutX="225.0" layoutY="3.0" onMouseClicked="#buttonHandlerFormone">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#000abf" height="78.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="188.0" />
+                        <Text fill="WHITE" layoutX="34.0" layoutY="43.576171875" onMouseClicked="#buttonHandlerFormone" strokeType="OUTSIDE" strokeWidth="0.0" text="Datasource">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </Group>
+               </children></AnchorPane>
+            <Circle layoutX="870.0" layoutY="48.0" onMouseClicked="#exitMain" radius="23.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+               <fill>
+                  <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.6947368383407593" green="0.05660818889737129" blue="0.05660818889737129" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </RadialGradient>
+               </fill></Circle>
+            <Line endX="50.0" layoutX="826.0" layoutY="280.0" opacity="0.26" rotate="90.0" startX="-100.0" stroke="#00000045" strokeWidth="2.0" />
+         </children>
+      </AnchorPane>
+      <Line endX="200.0" layoutX="426.0" layoutY="581.0" opacity="0.26" rotate="90.0" startX="-100.0" stroke="#00000045" strokeWidth="2.0" />
+      <TableView fx:id="datasourceTable" layoutX="20.0" layoutY="421.0" prefHeight="320.0" prefWidth="416.0">
+        <columns>
+          <TableColumn fx:id="coljdbcdriver" prefWidth="111.20000839233398" text="JDBC Driver" />
+          <TableColumn fx:id="colhost" prefWidth="83.20004272460938" text="Host" />
+            <TableColumn fx:id="colport" prefWidth="49.60005187988281" text="Port" />
+            <TableColumn fx:id="coldatabasenm" prefWidth="76.79998779296875" text="Database" />
+            <TableColumn fx:id="coldelete" prefWidth="76.79998779296875" text="Action" />
+        </columns>
+      </TableView>
+      <AreaChart layoutX="474.0" layoutY="408.0" prefHeight="359.0" prefWidth="439.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </AreaChart>
+   </children>
+</AnchorPane>
