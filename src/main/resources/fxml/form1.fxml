@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="744.0" prefWidth="652.0" style="-fx-border-color: #CBCAC7; -fx-border-radius: 5; -fx-background-color: #FFFFFF;" stylesheets="@../images/design.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codetreatise.controller.DatasourceController">
+<AnchorPane prefHeight="744.0" prefWidth="652.0" style="-fx-border-color: #CBCAC7; -fx-border-radius: 5; -fx-background-color: #FFFFFF;" stylesheets="@../images/design.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.licensemanager.controller.DatasourceController">
    <children>
       <Label layoutX="14.0" layoutY="7.0" text="Datasource" textFill="MIDNIGHTBLUE">
          <font>

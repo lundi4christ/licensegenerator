@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="750.0" prefWidth="853.0" style="-fx-border-color: #FFFFFF; -fx-border-radius: 5; -fx-background-color: #FFFFFF;" stylesheets="@../images/design.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codetreatise.controller.LicenseGeneratorController">
+<AnchorPane prefHeight="750.0" prefWidth="853.0" style="-fx-border-color: #FFFFFF; -fx-border-radius: 5; -fx-background-color: #FFFFFF;" stylesheets="@../images/design.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.licensemanager.controller.LicenseGeneratorController">
    <children>
       <Label layoutX="15.0" layoutY="3.0" text="License Generator" textFill="MIDNIGHTBLUE">
          <font>
