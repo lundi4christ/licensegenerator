@@ -33,6 +33,8 @@ public class dataSourceDb {
     @Column(name="datasourcenm", nullable = false, unique = true)
     private String datasourcenm;
 
+    @Column(name="dataurl")
+    private String dataurl;
 
 
     //no arg constructor
@@ -111,9 +113,17 @@ public class dataSourceDb {
     }
 
     public void setDatasourcenm(String datasourcenm){
+
         this.datasourcenm=datasourcenm;
     }
 
+    public String getDataurl(){
+        return dataurl;
+    }
+
+    public void setDataurl(String dataurl){
+        this.dataurl=dataurl;
+    }
 
     //toString()
 
@@ -125,6 +135,7 @@ public class dataSourceDb {
                 ", port=" + port +
                 ", database='" + databasenm + '\'' +
                 ", username='" + username + '\'' +
+                ", dataurl='" + dataurl + '\'' +
                 ", datasourcenm='" + datasourcenm + '\''+
                 '}';
     }

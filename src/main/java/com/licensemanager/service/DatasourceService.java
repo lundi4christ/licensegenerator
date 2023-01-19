@@ -11,5 +11,4 @@ public interface DatasourceService extends GenericService<dataSourceDb> {
 
     //void deleteDatasourcenm(Long id);
 
-
 }

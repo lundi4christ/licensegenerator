@@ -48,10 +48,14 @@ public class DatasourceController implements Initializable{
 	private TextField databasenm;
 	@FXML
 	private TextField username;
+	/*@FXML
+	private TextField password;*/
 	@FXML
-	private TextField password;
+	private PasswordField password;
 	@FXML
 	private TextField datasourcenm;
+	@FXML
+	private TextField dataurl;
 	@FXML
 	private Label label;
 	@FXML
@@ -140,11 +144,12 @@ public class DatasourceController implements Initializable{
 				datasource.setPort(getPort());
 				datasource.setDatabasenm(getDatabasenm());
 				datasource.setUsername(getUsername());
+				datasource.setDataurl(getDataurl());
 
-			String originalInput = getPassword();
-			String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
+			/*String originalInput = getPassword();
+			String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());*/
 
-				datasource.setPassword(encodedString);
+				datasource.setPassword(getPassword());
 
 				//datasource.setPassword(getPassword());
 				datasource.setDatasourcenm(getDatasourcenm());
@@ -166,6 +171,7 @@ public class DatasourceController implements Initializable{
 			datasource.setUsername(getUsername());
 			datasource.setPassword(getPassword());
 			datasource.setDatasourcenm(getDatasourcenm());
+			datasource.setDataurl(getDataurl());
 
 			dataSourceDb datas = datasourceService.update(datasource);
 			System.out.println(datas);
@@ -203,6 +209,9 @@ public class DatasourceController implements Initializable{
 		String sourcenm = datasourcenm.getText();
 		String usernm = username.getText();
 		String pass = password.getText();
+/*		//String originalInput = getPassword();
+		String encodedString = Base64.getEncoder().encodeToString(pass.getBytes());*/
+		String url = dataurl.getText();
 
 		dataSourceDb updata = datasourceService.findByDatasourcenm(datasourceup.getDatasourcenm());
 		int getid = Math.toIntExact(updata.getId());
@@ -221,6 +230,8 @@ public class DatasourceController implements Initializable{
 		System.out.println("----------" + updatesusernm);
 		int updatepass = jdbcTemplate.update("update datadbsource set datadbsource.password='" + pass + "' where datadbsource.id= " + getid + " ");
 		System.out.println("----------" + updatepass);
+		int updateurl = jdbcTemplate.update("update datadbsource set datadbsource.dataurl='" + url + "' where datadbsource.id= " + getid + " ");
+		System.out.println("----------" + updateurl);
 
 		return updata;
 	}
@@ -297,7 +308,9 @@ public class DatasourceController implements Initializable{
 	public String getPasswordkey(){
 		return password.getText();
 	}
-
+	public String getDataurl(){
+		return dataurl.getText();
+	}
 
 	public void backtoDashboard(MouseEvent event) throws IOException {
 			stageManager.switchScene(FxmlView.DASHBOARD);
@@ -348,13 +361,22 @@ public class DatasourceController implements Initializable{
 
 	private dataSourceDb sourcedbdetails(dataSourceDb datasource){
 		dataSourceDb thedata = datasourceService.findByDatasourcenm(datasource.getDatasourcenm());
-			jdbcdriver.setValue(thedata.getJdbcdriver());
+
+			if (jdbcdrivertext.getText().equalsIgnoreCase("com.microsoft.sqlserver.jdbc.SQLServerDriver")){
+				jdbcdriver.setValue("MS SQL Server Driver");
+			} else if (jdbcdrivertext.getText().equalsIgnoreCase("oracle.jdbc.OracleDriver")){
+				jdbcdriver.setValue("Oracle Driver");
+			} else if (jdbcdrivertext.getText().equalsIgnoreCase("com.mysql.jdbc.Driver")){
+				jdbcdriver.setValue("MYSQL Driver");
+			}
 			host.setText(thedata.getHost());
 			port.setText(Integer.toString(thedata.getPort()));
 			databasenm.setText(thedata.getDatabasenm());
 			datasourcenm.setText(thedata.getDatasourcenm());
 			username.setText(thedata.getUsername());
 			password.setText(thedata.getPassword());
+			dataurl.setText(thedata.getDataurl());
+			jdbcdrivertext.setText(thedata.getJdbcdriver());
 
 		return thedata;
 	}

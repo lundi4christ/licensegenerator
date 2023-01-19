@@ -4,13 +4,12 @@ package com.licensemanager.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import com.licensemanager.bean.dataSourceDb;
 import com.licensemanager.bean.licenseGeneratorDb;
@@ -20,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import net.bytebuddy.asm.Advice;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -128,8 +128,6 @@ public class LicenseGeneratorController implements Initializable{
 		datas.setDatasourcenm((String) datasource.getSelectionModel().getSelectedItem());
 
 		getData(datas);
-
-
 	}
 
 	@FXML
@@ -174,29 +172,73 @@ public class LicenseGeneratorController implements Initializable{
 			licenseGeneratorDb getdbnm = new licenseGeneratorDb();
 			getdbnm.setDbsourcenm((String) datasource.getSelectionModel().getSelectedItem());
 			System.out.println(getdbnm.getDbsourcenm());
-			showkeydetails(getdbnm);
+			try {
+				showkeydetails(getdbnm);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 
 
 		});
 
 	}
 
-	private licenseGeneratorDb showkeydetails(licenseGeneratorDb licensedb){
+	private licenseGeneratorDb showkeydetails(licenseGeneratorDb licensedb) throws ParseException {
 		licenseGeneratorDb thedata = licenseGenService.findByDbsourcenm(licensedb.getDbsourcenm());
-		System.out.println("gggggggggggggggggggggg " + thedata);
+		dataSourceDb ldata = datasourceService.findByDatasourcenm(licensedb.getDbsourcenm());
+
+		System.out.println("gggggshow key details gggggggg " + thedata);
+		System.out.println("gggggggggggggggggggggg " + ldata);
+
+		/////////////////////////GET DETAILS FROM DB DESTINATION ////////////////////////////////////////
+		DriverManagerDataSource mydb = new DriverManagerDataSource();
+
+		mydb.setDriverClassName(ldata.getJdbcdriver());
+		mydb.setUrl(ldata.getDataurl());
+		mydb.setUsername(ldata.getUsername());
+
+		String encrp = ldata.getPassword();
+		mydb.setPassword(encrp);
+
+		jdbcTemplate = new JdbcTemplate(mydb);
+		String dateexp = "SELECT control_parameter.value  FROM control_parameter WHERE control_parameter.code = 'CP110'";
+		String s = jdbcTemplate.queryForObject(dateexp, String.class);
+		String daysrem = "SELECT control_parameter.value  FROM control_parameter WHERE control_parameter.code = 'CP118'";
+		String s2 = jdbcTemplate.queryForObject(daysrem, String.class);
+		String daysgrace = "SELECT control_parameter.value  FROM control_parameter WHERE control_parameter.code = 'CP119'";
+		String s3 = jdbcTemplate.queryForObject(daysgrace, String.class);
+		String prodkey = "SELECT control_parameter.value  FROM control_parameter WHERE control_parameter.code = 'CP129'";
+		String s4 = jdbcTemplate.queryForObject(prodkey, String.class);
+		//System.out.println("eeeeeeeeeeeeeeeeeeeeee " + s + " " + s2 + " " + s3);
+
+		StandardPBEStringEncryptor strdecript = new StandardPBEStringEncryptor();
+		strdecript.setPassword(s4);
+		String dateexpdecript = strdecript.decrypt(s);
+
+		String pattern = "yyyy-MM-dd";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		Date expirydate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(dateexpdecript);
+		String expirydate2 = simpleDateFormat.format(expirydate);
+		//System.out.println("22222222222222222222 " + expirydate2);
+		LocalDate localexpdate = LocalDate.parse(expirydate2);
+
+		String daysremdecript = strdecript.decrypt(s2);
+		String daysgracedecript = strdecript.decrypt(s3);
+
+		effectivedate.setValue(localexpdate);
+		remdays.setText(daysremdecript);
+		gracedays.setText(daysgracedecript);
+///////////////////////////////////////////////////////////////////////////////////////////////
+
 		status.setValue(thedata.getStatus());
 		deploy.setValue(thedata.getDeploy());
 		durationdays.setText(Integer.toString(thedata.getDurationdays()));
-		effectivedate.setValue(thedata.getEffectivedate());
 		env.setValue(thedata.getEnv());
-		gracedays.setText(Integer.toString(thedata.getGracedays()));
 		hostmac.setText(thedata.getHostmac());
 		hostname.setText(thedata.getHostname());
 		opsystem.setValue(thedata.getOpsystem());
 		productName.setValue(thedata.getProductname());
-		remdays.setText(Integer.toString(thedata.getRemdays()));
 		version.setText(thedata.getVersion());
-
 
 		return thedata;
 	}
@@ -207,14 +249,14 @@ public class LicenseGeneratorController implements Initializable{
 		//dataSourceDb thedata = datasourceService.findByDatabasenm(datasources.getDatabasenm());
 
 		dataSourceDb thedata = datasourceService.findByDatasourcenm(datasources.getDatasourcenm());
-		System.out.println("gggggggggggggggggggggg " + thedata);
+		System.out.println("gggggggggggggggggggggg +++ " + thedata);
 
 		DriverManagerDataSource mydb = new DriverManagerDataSource();
 
 		String dbusername = thedata.getUsername();
 
 		mydb.setDriverClassName(thedata.getJdbcdriver());
-		mydb.setUrl("jdbc:sqlserver://" + thedata.getHost() + ";" + "database=" + thedata.getDatabasenm());
+		mydb.setUrl(thedata.getDataurl());
 		mydb.setUsername(thedata.getUsername());
 
 		String encrp = thedata.getPassword();
@@ -222,13 +264,12 @@ public class LicenseGeneratorController implements Initializable{
 
 		byte[] result = Base64.getDecoder().decode(thedata.getPassword());
 		String decodedString = new String(result);
-		System.out.println("oooooooooooooo " + decodedString);
+		System.out.println("ooooooo++++oooo " + decodedString);
 
 		mydb.setPassword(decodedString);
 
-
 		try {
-			mydb.getConnection(thedata.getUsername(),decodedString);
+			mydb.getConnection(thedata.getUsername(),encrp);
 			if(mydb != null){
 				conlabel.setText("Connected Successfully");
 			}
@@ -245,9 +286,9 @@ public class LicenseGeneratorController implements Initializable{
 
 		}
 
-		jdbcTemplate = new JdbcTemplate(mydb);
+		/*jdbcTemplate = new JdbcTemplate(mydb);
 
-		List<Map<String, Object>> getList = jdbcTemplate.queryForList("SELECT databasenm FROM DATADBSOURCE");
+		List<Map<String, Object>> getList = jdbcTemplate.queryForList("SELECT code FROM dbusername.control_parameter");
 
 		for(Map m : getList) {
 			dataSourceDb db = new dataSourceDb();
@@ -255,7 +296,7 @@ public class LicenseGeneratorController implements Initializable{
 
 			System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh" + m);
 
-		}
+		}*/
 
 		return thedata;
 	}
@@ -281,21 +322,21 @@ public class LicenseGeneratorController implements Initializable{
 
 
 
-	public dataSourceDb queryLicenseGen(dataSourceDb datasources) throws SQLException {
+	public dataSourceDb queryLicenseGen(dataSourceDb datasources) throws SQLException, ParseException {
 
 		dataSourceDb thedata = datasourceService.findByDatasourcenm(datasources.getDatasourcenm());
 		String myusername = thedata.getUsername();
 		DriverManagerDataSource mydb = new DriverManagerDataSource();
 
 		mydb.setDriverClassName(thedata.getJdbcdriver());
-		mydb.setUrl("jdbc:sqlserver://" + thedata.getHost() + ";" + "database=" + thedata.getDatabasenm());
+		mydb.setUrl(thedata.getDataurl());
 		mydb.setUsername(thedata.getUsername());
 
 		byte[] result = Base64.getDecoder().decode(thedata.getPassword());
 		String decodedString = new String(result);
-		System.out.println("oooooooooooooo " + decodedString);
+		System.out.println("oooooooooooooo " + thedata.getPassword());
 
-		mydb.setPassword(decodedString);
+		mydb.setPassword(thedata.getPassword());
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(mydb);
 
@@ -326,7 +367,7 @@ public class LicenseGeneratorController implements Initializable{
 		System.out.println("=========================" + licensedata);
 
 			if(licensedata == null){
-				int updatelicenkey = jdbcTemplate.update("update " + myusername + ".control_parameter set control_parameter.value='" + licensekey + "' where control_parameter.code='CP127'");
+				int updatelicenkey = jdbcTemplate.update("update " + myusername + ".control_parameter set control_parameter.value='" + licensekey + "' where control_parameter.code='CP129'");
 				System.out.println("<<<<<<<<<<<<<<<<<<<<< " + updatelicenkey);
 				int updateexpirydt = jdbcTemplate.update("update " + myusername + ".control_parameter set control_parameter.value='" + licenseexpdate + "' where control_parameter.code='CP110'");
 				System.out.println("<<<<<<<<<<<<<<<<<<<<< " + updateexpirydt);
@@ -362,19 +403,18 @@ public class LicenseGeneratorController implements Initializable{
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
 				alert.setContentText("Datasource cannot be updated with NEW status");
 				alert.show();
-
 			}
 
 		}
 
 		if(status.getSelectionModel().getSelectedItem().equals("EXTEND")){
 
-			String getlicensekey = "select value from "+myusername+".control_parameter where  code='CP127'";
-			String key = jdbcTemplate.queryForObject(getlicensekey, String.class);;
+			String getlicensekey = "select value from "+myusername+".control_parameter where  code='CP129'";
+			//String key = jdbcTemplate.queryForObject(getlicensekey, String.class);;
 			String genkeys2 = getProdName()+"¬"+getVer()+"¬"+getOpsystem()+"¬"+getEnv()+"¬"+getEffectiveDate()+"¬"+getDurationdays()+"¬"+getRemdays()+"¬"+getGracedays()+"¬"+getHostname();
 			String licensekey2 = passwordEncoder.encode(genkeys2);
 			StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
-			decryptor.setPassword(key);
+			decryptor.setPassword(licensekey2);
 
 			String licenseexpdateextend = decryptor.encrypt(getdate());
 			String licenseremdaysextend = decryptor.encrypt(getRem());
@@ -385,7 +425,7 @@ public class LicenseGeneratorController implements Initializable{
 			System.out.println("<<<<<<<<<<< License Remaining Days Encrypt>>>>>>> "+ licenseremdaysextend);
 			System.out.println("<<<<<<<<<<< License Grace period Encrypt>>>>>>> "+ licensegracedaysextend);
 
-			int updatelicenkey = jdbcTemplate.update("update "+myusername+".control_parameter set control_parameter.value='" + licensekey2 + "' where control_parameter.code='CP127'");
+			int updatelicenkey = jdbcTemplate.update("update "+myusername+".control_parameter set control_parameter.value='" + licensekey2 + "' where control_parameter.code='CP129'");
 			System.out.println("<<<<<<<<<<<<<<<<<<<<< " + updatelicenkey);
 			int updateexpirydt = jdbcTemplate.update("update "+myusername+".control_parameter set control_parameter.value='" + licenseexpdateextend + "' where control_parameter.code='CP110'");
 			System.out.println("<<<<<<<<<<<<<<<<<<<<< " + updateexpirydt);
@@ -428,7 +468,7 @@ public class LicenseGeneratorController implements Initializable{
 
 			if(LocalDate.now().isAfter(licensedata.getExpirydate())){
 
-				String getlicensekey = "select value from "+myusername+".control_parameter where  code='CP127'";
+				String getlicensekey = "select value from "+myusername+".control_parameter where  code='CP129'";
 				String key = jdbcTemplate.queryForObject(getlicensekey, String.class);;
 				String genkeys2 = getProdName()+"¬"+getVer()+"¬"+getOpsystem()+"¬"+getEnv()+"¬"+getEffectiveDate()+"¬"+getDurationdays()+"¬"+getRemdays()+"¬"+getGracedays()+"¬"+getHostname();
 				String licensekey2 = passwordEncoder.encode(genkeys2);
@@ -444,7 +484,7 @@ public class LicenseGeneratorController implements Initializable{
 				System.out.println("<<<<<<<<<<< License Remaining Days Encrypt>>>>>>> "+ licenseremdaysextend);
 				System.out.println("<<<<<<<<<<< License Grace period Encrypt>>>>>>> "+ licensegracedaysextend);
 
-				int updatelicenkey = jdbcTemplate.update("update "+myusername+".control_parameter set control_parameter.value='" + licensekey2 + "' where control_parameter.code='CP127'");
+				int updatelicenkey = jdbcTemplate.update("update "+myusername+".control_parameter set control_parameter.value='" + licensekey2 + "' where control_parameter.code='CP129'");
 				System.out.println("<<<<<<<<<<<<<<<<<<<<< " + updatelicenkey);
 				int updateexpirydt = jdbcTemplate.update("update "+myusername+".control_parameter set control_parameter.value='" + licenseexpdateextend + "' where control_parameter.code='CP110'");
 				System.out.println("<<<<<<<<<<<<<<<<<<<<< " + updateexpirydt);
@@ -493,7 +533,7 @@ public class LicenseGeneratorController implements Initializable{
 
 
 	@FXML
-	private void generateKey(ActionEvent event) throws SQLException {
+	private void generateKey(ActionEvent event) throws SQLException, ParseException {
 
 		dataSourceDb datas = new dataSourceDb();
 		datas.setDatasourcenm((String) datasource.getSelectionModel().getSelectedItem());
@@ -523,9 +563,14 @@ public class LicenseGeneratorController implements Initializable{
 	}
 
 	// converting date, days and int to String to encrypt
-	public String getdate(){
-		return getExpirydate().toString();
+	public String getdate() throws ParseException {
+				String pattern = "yyyy-MM-d";
+				SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+				Date date = sdf.parse(String.valueOf(effectivedate.getValue().plusDays(Integer.parseInt(durationdays.getText()))));
+				System.out.println("dddddddddddddddddddddd = " + date);
+				return date.toString();
 	}
+
 	public String getRem(){
 		return Integer.toString(getRemdays());
 	}
