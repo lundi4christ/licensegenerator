@@ -115,7 +115,6 @@ public class LicenseGeneratorController implements Initializable{
 	public Label conlabel;
 
 	ObservableList<String> productlist = FXCollections.observableArrayList("App1", "App2", "App3");
-	//ObservableList<String> datasourcetlist = FXCollections.observableArrayList("LICENSE", "TRADEX");
 	ObservableList<String> opsystemlist = FXCollections.observableArrayList("WINDOWS", "AIX", "LINUX");
 	ObservableList<String> envlist = FXCollections.observableArrayList("DEV", "UAT", "LIV");
 	ObservableList<String> deploylist = FXCollections.observableArrayList("SINGLE", "CLUSTER");
