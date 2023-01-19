@@ -114,7 +114,7 @@ public class LicenseGeneratorController implements Initializable{
 	@FXML
 	public Label conlabel;
 
-	ObservableList<String> productlist = FXCollections.observableArrayList("Trade-X", "Kachasi", "Optimus");
+	ObservableList<String> productlist = FXCollections.observableArrayList("App1", "App2", "App3");
 	//ObservableList<String> datasourcetlist = FXCollections.observableArrayList("LICENSE", "TRADEX");
 	ObservableList<String> opsystemlist = FXCollections.observableArrayList("WINDOWS", "AIX", "LINUX");
 	ObservableList<String> envlist = FXCollections.observableArrayList("DEV", "UAT", "LIV");
@@ -141,7 +141,7 @@ public class LicenseGeneratorController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		productName.setValue("Trade-X");
+		productName.setValue("App");
 		productName.setItems(productlist);
 		//datasource.setItems(datasourcetlist);
 		status.setValue("NEW");
