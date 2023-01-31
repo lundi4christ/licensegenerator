@@ -1,4 +1,4 @@
-package com.spring.javafxspringboot;
+package com.licensemanager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
