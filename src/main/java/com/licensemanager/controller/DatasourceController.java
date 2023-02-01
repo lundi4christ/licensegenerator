@@ -105,7 +105,7 @@ public class DatasourceController implements Initializable{
 			DriverManagerDataSource dataSource = new DriverManagerDataSource();
 			//dataSource.setDriverClassName((String) jdbcdriver.getSelectionModel().getSelectedItem());
 			dataSource.setDriverClassName(jdbcdrivertext.getText());
-			System.out.println(jdbcdrivertext.getText());
+			System.out.println("my jdbc driver == " + jdbcdrivertext.getText());
 
 			if(jdbcdriver.getSelectionModel().getSelectedItem().equals("SQL Server Driver")) {
 				dataSource.setUrl("jdbc:sqlserver://" + host.getText() + ":" + Integer.parseInt(port.getText()) + ";" + "database=" + databasenm.getText());
@@ -326,10 +326,13 @@ public class DatasourceController implements Initializable{
 			if(jdbcdriver.getSelectionModel().getSelectedItem().equals("MS SQL Server Driver")){
 				//jdbcdriver.setValue(dataList.SQL_SERVER_DRIVER.getDescription());
 				jdbcdrivertext.setText(dataList.SQL_SERVER_DRIVER.getDescription());
+				dataurl.setText("jdbc:sqlserver://" + host.getText() + ":" + Integer.parseInt(port.getText()) + ";" + "database=" + databasenm.getText());
 			} else if(jdbcdriver.getSelectionModel().getSelectedItem().equals("Oracle Driver")) {
 				jdbcdrivertext.setText(dataList.ORACLE_SQL_DRIVER.getDescription());
+				dataurl.setText("jdbc:oracle:thin:@" + host.getText() + ":" + Integer.parseInt(port.getText()) + ":" + databasenm.getText());
 			} else if(jdbcdriver.getSelectionModel().getSelectedItem().equals("MYSQL Driver")){
 				jdbcdrivertext.setText(dataList.MYSQL_DRIVER.getDescription());
+				dataurl.setText("jdbc:mysql://" + host.getText() + ":" + Integer.parseInt(port.getText()) + "/" + databasenm.getText());
 			}
 		});
 
